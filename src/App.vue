@@ -1,17 +1,25 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="landing-text">
+      <console-text finalText="SMMH.IR" ></console-text>
+    </div>
+    <div class="link-container">
+      <word-scramble finalText="/aboutme" :delay="2000"></word-scramble>
+      <word-scramble finalText="/projects" :delay="2000"></word-scramble>
+      <word-scramble finalText="/contact" :delay="2000"></word-scramble>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import ConsoleText from './components/ConsoleText.vue'
+import WordScramble from './components/WordScramble.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    ConsoleText,
+    WordScramble
   }
 }
 </script>
@@ -25,4 +33,15 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+.landing-text {
+  padding-top: 20vh;
+}
+
+.link-container {
+  display: flex;
+  align-content: center;
+  justify-content: space-around;
+}
+
 </style>
