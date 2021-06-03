@@ -1,21 +1,29 @@
 <template>
-  <div>
       <div class='console-container'>
           <span>
               {{text}}
           </span>
+          
           <span :class=" showUnderscore ? 'console-underscore' : 'console-underscore hidden' " id='console'>
               &#95;
           </span>
         </div>
-  </div>
 </template>
 
 <script>
 export default {
     props: {
-        finalText: {
-            type:String
+        fromHome: {
+            type: Boolean,
+            default: false
+        },
+        staticText: {
+            type:String,
+            default: 'Hello'
+        },
+        dynamicText: {
+            type:String,
+            default: 'World'
         },
         delay: {
             type:Number,
@@ -23,7 +31,7 @@ export default {
         },
         speed: {
             type:Number,
-            default: 200
+            default: 100
         },
         startingString: {
             type: String,
@@ -34,31 +42,63 @@ export default {
         blink() {
             this.showUnderscore = !this.showUnderscore
         },
-        addLetter(desiredText) {
-            
+        addString(text , speed = this.speed, delay = this.delay) {
+            let desiredText = text.split('')
             desiredText.forEach((element , i) => {
                 setTimeout( () => {
                     this.text = this.text.concat(element)
-                },this.speed * i + this.delay)
+                },speed * i + delay)
             });
+        },
+        removeletters(num , speed = this.speed) {
+            for (let i = 0; i < num; i++) {
+                setTimeout( () => {
+                    this.text = this.text.slice(0,-1)
+                },speed * i + this.delay)
+                
+            }
         }
     },
     data() {
         return {
             showUnderscore: false,
             text:">",
+            oldDynamicText:"",
+            animate:false,
         }
 
     },
-    created() {
+    watch: {
+        dynamicText: function(newVal) {
+            if (this.animate) {
+                this.removeletters(this.oldDynamicText.length , this.speed * 2)
+                this.addString(newVal ,this.speed * 2 , this.oldDynamicText.length * this.speed * 2  + (2 * this.delay) )
+            }
+            else {
+                this.addString(this.staticText + this.dynamicText)
+            }
+
+            this.animate = true
+            this.oldDynamicText = newVal
+
+        }
+    },
+    mounted() {
         setInterval(this.blink, 400)
-        this.addLetter(this.finalText.split(''))
-        this.text = this.startingString
+        if (this.fromHome) {
+            this.addString(this.staticText + this.dynamicText)
+            this.text = this.startingString
+            this.animate = true
+
+        }
+        else {
+            console.log(this.dynamicText)
+        }
     }
 }
 </script>
 
-<style>
+<style scoped>
 
 
 .hidden {
@@ -66,25 +106,20 @@ export default {
 }
 
 .console-container {
- 
   font-family:monospace;
-  font-size: 5vh;
   text-align:center;
-  height:20vh;
-  width:100vw;
-  display: block;
   color:black;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  margin:auto;
 }
 
 
 .console-underscore {
   position:relative;
   top:-0.14em;
-  left:-1rem;
 }
+
+span{
+display: inline-block;
+}
+
+
 </style>

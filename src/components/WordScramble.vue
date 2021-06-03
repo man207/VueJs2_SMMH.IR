@@ -1,11 +1,7 @@
 <template>
-  <div>
-      <div class='word-container'>
-          <span>
+      <div :class="{'word-container': true , 'hoverable': hoverable}">
               {{text}}
-          </span>
         </div>
-  </div>
 </template>
 
 <script>
@@ -25,21 +21,27 @@ export default {
         startingString: {
             type: String,
             default: ""
+        },
+        hoverable: {
+            type: Boolean,
+            default: false
+        },
+        scrambleChars: {
+            tyoe: Number,
+            default: 1
         }
     },
     methods: {
         addLetter(desiredText) {
-            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@#$%^&';
             var charactersLength = characters.length;
             desiredText.forEach((element , i) => {
                 setTimeout( () => {
                     this.text = this.text.concat(characters.charAt(Math.floor(Math.random() * charactersLength)))
-                    this.text = this.text.concat(characters.charAt(Math.floor(Math.random() * charactersLength)))
-                },this.speed * i + (this.delay - this.speed));
+                },this.speed * (i) + this.delay );
                 setTimeout( () => {
-                    this.text = this.text.slice(0,-2)
-                    this.text = this.text.concat(element)
-                },this.speed * i + this.delay);
+                    this.text = this.text.substr(0,i) + element + this.text.substr(i+1)
+                },this.speed * (i + this.scrambleChars) + this.delay);
             });
         }
     },
@@ -50,6 +52,7 @@ export default {
 
     },
     mounted() {
+        
         this.addLetter(this.finalText.split(''))
         this.text = this.startingString
     }
@@ -63,26 +66,17 @@ export default {
 
 .word-container {
  
-  font-family:monospace;
-  font-size: 5vh;
-  text-align:center;
-  display: block;
   position:relative;
   color:black;
-  top:0;
-  bottom:0;
-  left:0;
-  right:0;
-  margin:auto;
   transition: 0.5s;
-
 
   
 }
 
-.word-container:hover {
+.hoverable:hover {
     color: rgb(255, 72, 0);
-    font-weight: 400;
+    font-weight: 450;
+    cursor: pointer;
 }
 
 </style>
