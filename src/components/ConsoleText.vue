@@ -1,9 +1,14 @@
 <template>
       <div class='console-container'>
           <span>
+              {{startingString}}
+          </span>
+          <span>
+              {{preText}}
+          </span>
+          <span>
               {{text}}
           </span>
-          
           <span :class=" showUnderscore ? 'console-underscore' : 'console-underscore hidden' " id='console'>
               &#95;
           </span>
@@ -42,58 +47,63 @@ export default {
         blink() {
             this.showUnderscore = !this.showUnderscore
         },
-        addString(text , speed = this.speed, delay = this.delay) {
-            let desiredText = text.split('')
+        checkAndWrite() {
+            if (this.hasChanged) {
+                
+                if (this.toDelete > 0) {
+                    this.dynamicPart.pop()
+                    this.toDelete = this.toDelete - 1
+                }
+                else if (this.inLine.length != 0 ) {
+                    this.dynamicPart = this.dynamicPart.concat(this.inLine.shift())
+                    console.log(this.dynamicPart)
+
+                }
+                else if (this.inLine.length == 0) {
+                    this.hasChanged = false
+                }
+            }
+        },
+        firstWrite() {
+            let desiredText = this.staticText.split('')
             desiredText.forEach((element , i) => {
                 setTimeout( () => {
-                    this.text = this.text.concat(element)
-                },speed * i + delay)
+                    this.preText = this.preText.concat(element)
+                },this.speed * i + this.delay)
             });
-        },
-        removeletters(num , speed = this.speed) {
-            for (let i = 0; i < num; i++) {
-                setTimeout( () => {
-                    this.text = this.text.slice(0,-1)
-                },speed * i + this.delay)
-                
-            }
         }
     },
     data() {
         return {
             showUnderscore: false,
-            text:">",
-            oldDynamicText:"",
-            animate:false,
+            dynamicPart: [],
+            inLine: [],
+            toDelete: 0,
+            hasChanged: false,
+            preText: ""
         }
 
     },
+    computed: {
+        text: function() {
+            return  this.dynamicPart.join('')
+        }
+    },
     watch: {
         dynamicText: function(newVal) {
-            if (this.animate) {
-                this.removeletters(this.oldDynamicText.length , this.speed * 2)
-                this.addString(newVal ,this.speed * 2 , this.oldDynamicText.length * this.speed * 2  + (2 * this.delay) )
-            }
-            else {
-                this.addString(this.staticText + this.dynamicText)
-            }
-
-            this.animate = true
-            this.oldDynamicText = newVal
-
+            this.inLine = newVal.split('')
+            this.hasChanged = true
+            this.toDelete = this.dynamicPart.length + 1
         }
     },
     mounted() {
         setInterval(this.blink, 400)
-        if (this.fromHome) {
-            this.addString(this.staticText + this.dynamicText)
-            this.text = this.startingString
-            this.animate = true
+        this.firstWrite()
+        setTimeout(() => {
+            setInterval(this.checkAndWrite, this.speed);
+        }, this.speed * this.staticText.length + this.delay);
+        
 
-        }
-        else {
-            console.log(this.dynamicText)
-        }
     }
 }
 </script>

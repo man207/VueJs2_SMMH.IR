@@ -5,7 +5,9 @@
         <console-text staticText="ejbb.me/" :dynamicText="dynamicText " :fromHome="isHome"></console-text>
     </div>
     </div>
-    <router-view/>
+    <div>
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -48,8 +50,9 @@ export default {
   display: flex;
   justify-content: center;
   height: 20vh;
-  font-size: 4vmax;
+  font-size: 3vmax;
 }
+
 
 .navbar {
   transition: 1s;
@@ -59,12 +62,24 @@ export default {
 
 
 .landing-text {
-  padding-top: 20vh;
+  padding-top: 10vh;
 
 }
 
 
 
+@media (max-width: 728px) {
+  #nav {
+    height: 15vh;
+  }
+  .navbar {
+    transition: 1s;
+    padding-top: 2vh;
+  }
+  .landing-text {
+  padding-top: 10vh;
 
+  }
+}
 
 </style>
