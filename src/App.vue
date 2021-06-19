@@ -2,7 +2,7 @@
   <div id="app">
     <div id="nav">
       <div :class="{'navbar': true, 'landing-text': isHome}">
-        <console-text staticText="smmh.ir/" :dynamicText="dynamicText " :fromHome="isHome"></console-text>
+        <console-text staticText="ejbb.ir/" :dynamicText="dynamicText " :fromHome="isHome"></console-text>
     </div>
     </div>
     <div>

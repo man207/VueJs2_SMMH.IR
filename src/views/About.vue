@@ -6,7 +6,7 @@
         <word-scramble finalText="Hi" :delay="1500"></word-scramble>
       </h1>
       <p class="me">
-        <word-scramble finalText="I am Smmh. I love Web and I love being Simplistic... While Building Complex Systems"
+        <word-scramble finalText="I am Ehsan Jahanbakhsh. I love Web and I love being Simplistic... While Building Complex Systems"
         :delay="1500" :speed="20" :scrambleChars="5"></word-scramble>
       </p>
       <h2>
